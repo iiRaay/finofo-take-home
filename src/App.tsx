@@ -1,10 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import FruitList from './components/header';
+import Header from './components/header';
 function App() {
   return (
-    <FruitList />
+    <Header onReset={() => {console.log('reset clicked')}} />
+    // add list and jar here
   );
 }
 
