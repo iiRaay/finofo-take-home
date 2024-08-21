@@ -7,12 +7,15 @@ import Jar from './components/jar';
 import { Fruit, JarFruit } from './types/fruit';
 import { getAllFruits } from './services/getFruits';
 
+type GroupedFruit = { key?: string; values?: Fruit[] }[];
+
 function App() {
   const [fruits, setFruits] = useState<Fruit[]>([]);
   const [jar, setJar] = useState<JarFruit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [initialState, setInitialState] = useState<Fruit[]>([]);
+  const [groupBy, setGroupBy] = useState<string>('None');
 
   useEffect(() => {
     const fetchFruits = async () => {
@@ -29,11 +32,12 @@ function App() {
 
     fetchFruits();
   }, []);
-  
+
   const handleReset = () => {
-    setJar([]);
-    setFruits(initialState);
-  }
+    setJar([]); // empty jar
+    setFruits(initialState); // reset all fruits to init
+    setGroupBy('None'); // Reset groupBy to "None" -> reset the sorting...
+  };
 
   const removeFromJar = (id: string) => {
     setJar(jar.filter(jarFruit => jarFruit.id !== id));
@@ -41,7 +45,28 @@ function App() {
 
   const addToJar = (fruit: Fruit) => {
     setJar([...jar, { id: uuidv4(), fruit }]);
-  }
+  };
+
+  const handleGroupBy = (group: string) => {
+    setGroupBy(group);
+  };
+
+  const groupedFruits = (): GroupedFruit => {
+    if (groupBy === 'None') {
+      return [{ values: fruits }];
+    }
+
+    const grouped = fruits.reduce((groups: { [key: string]: Fruit[] }, fruit) => {
+      const groupKey = fruit[groupBy.toLowerCase() as keyof Fruit] as string;
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(fruit);
+      return groups;
+    }, {});
+
+    return Object.entries(grouped).map(([key, values]) => ({ key, values }));
+  };
 
   if (loading) {
     return <div>Loading Fruits...</div>;
@@ -53,9 +78,9 @@ function App() {
 
   return (
     <>
-      <Header onReset={handleReset} />
+      <Header onReset={handleReset} onGroupBy={handleGroupBy} groupBy={groupBy} />
       <div className="grid grid-cols-2 gap-4 p-4">
-        <FruitList fruits={fruits} addToJar={addToJar} />
+        <FruitList groupedFruits={groupedFruits()} addToJar={addToJar} />
         <Jar jar={jar} removeFromJar={removeFromJar}/>
       </div>
     </>
