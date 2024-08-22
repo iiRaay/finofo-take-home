@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Fruit } from '../types/fruit';
+import React, { useState } from "react";
+import { Fruit } from "../types/fruit";
 
 interface FruitListProps {
   groupedFruits: { key?: string; values?: Fruit[] }[];
@@ -7,17 +7,22 @@ interface FruitListProps {
 }
 
 const FruitList: React.FC<FruitListProps> = ({ groupedFruits, addToJar }) => {
-  const [expandedGroups, setExpandedGroups] = useState<{ [key: string]: boolean }>({});
+  const [expandedGroups, setExpandedGroups] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const toggleGroup = (key: string) => {
-    setExpandedGroups(prevState => ({ ...prevState, [key]: !prevState[key] }));
+    setExpandedGroups((prevState) => ({
+      ...prevState,
+      [key]: !prevState[key],
+    }));
   };
 
   return (
     <div>
-    <h2 className="text-xl font-semibold text-center">Fruits</h2>
-      {groupedFruits.map(group => (
-        <div key={group.key || 'flat'} className="mb-4">
+      <h2 className="text-xl font-semibold text-center">Fruits</h2>
+      {groupedFruits.map((group) => (
+        <div key={group.key || "flat"} className="mb-4">
           {group.key && (
             <h2
               className="cursor-pointer text-xl font-bold"
@@ -28,8 +33,11 @@ const FruitList: React.FC<FruitListProps> = ({ groupedFruits, addToJar }) => {
           )}
           {(!group.key || expandedGroups[group.key]) && (
             <ul>
-              {group.values?.map(fruit => (
-                <li key={fruit.name} className="flex justify-between items-center py-2">
+              {group.values?.map((fruit) => (
+                <li
+                  key={fruit.name}
+                  className="flex justify-between items-center py-2"
+                >
                   <span>{fruit.name}</span>
                   <button
                     onClick={() => addToJar(fruit)}

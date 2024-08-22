@@ -10,4 +10,3 @@ export interface JarFruit {
   id: string;
   fruit: Fruit;
 }
-

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface HeaderProps {
   onReset: () => void;
@@ -17,7 +17,12 @@ const Header: React.FC<HeaderProps> = ({ onReset, onGroupBy, groupBy }) => {
         <h1 className="text-2xl font-bold mr-6">Fruit List App - Finofo!</h1>
       </div>
       <div className="flex justify-center flex-col items-center mb-4">
-        <label htmlFor="groupBy" className="block text-l font-medium text-gray-700">Group by: </label>
+        <label
+          htmlFor="groupBy"
+          className="block text-l font-medium text-gray-700"
+        >
+          Group by:{" "}
+        </label>
         <select
           id="groupBy"
           value={groupBy}
